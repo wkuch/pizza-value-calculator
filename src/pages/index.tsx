@@ -23,12 +23,12 @@ const Home: NextPage = () => {
         <h2 className="text-1xl mb-3 text-center leading-normal text-gray-600 md:text-[1.5rem]">
           Calculate how much pizza you get for your money
         </h2>
-        {calculationResults.map((result) => {
-          return <ValueCalculator />;
+        {calculationResults.map((i) => {
+          return <ValueCalculator key={i} />;
         })}
         <button
           className="rounded bg-gray-800 p-2 text-white"
-          onClick={() => setCalculationResults([...calculationResults, 3])}
+          onClick={() => setCalculationResults([...calculationResults, 1])}
         >
           More calculations
         </button>
