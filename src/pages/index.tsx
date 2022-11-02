@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useState } from "react";
 
 const Home: NextPage = () => {
-  const [calculationResults, setCalculationResults] = useState<number[]>([]);
+  const [calculationResults, setCalculationResults] = useState<number[]>([0]);
 
   return (
     <>
@@ -17,19 +17,20 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <h1 className="text-5xl font-extrabold leading-normal text-gray-700 md:text-[5rem]">
+        <h1 className="mb-5 text-center text-5xl font-extrabold leading-normal text-gray-800 md:text-[5rem]">
           <span className="text-red-300">Pizza</span> value calculator
         </h1>
-        <div className="mt-3 pt-3 text-center">
-          {calculationResults.map((result) => {
-            return <ValueCalculator />;
-          })}
-        </div>
+        <h2 className="text-1xl mb-3 text-center leading-normal text-gray-600 md:text-[1.5rem]">
+          Calculate how much pizza you get for your money
+        </h2>
+        {calculationResults.map((result) => {
+          return <ValueCalculator />;
+        })}
         <button
           className="rounded bg-gray-800 p-2 text-white"
           onClick={() => setCalculationResults([...calculationResults, 3])}
         >
-          More Pizza
+          More calculations
         </button>
       </main>
     </>
@@ -51,7 +52,7 @@ const ValueCalculator = () => {
     if (isNaN(result)) {
       setResult("Please enter only numbers");
     } else {
-      setResult(result.toFixed(2) + " cm²/€ (more is better)");
+      setResult(result.toFixed(2));
     }
   };
 
@@ -60,12 +61,13 @@ const ValueCalculator = () => {
   const [result, setResult] = useState<string>("");
 
   return (
-    <section className="mb-3 flex flex-row">
-      <form className="basis-3/4">
+    <div className="mb-3 flex w-full flex-row items-center justify-center md:w-3/4 lg:w-1/2">
+      <form className="flex basis-1/2 flex-row">
         <label className="p-2">
           Price:
           <input
-            className="ml-2 rounded bg-gray-200 p-2"
+            className="ml-2 w-12 rounded-lg border border-gray-200 bg-gray-100 p-2"
+            placeholder=""
             type="text"
             value={price}
             onChange={(e) => {
@@ -77,7 +79,7 @@ const ValueCalculator = () => {
         <label className="p-2">
           Size:
           <input
-            className="ml-2 rounded bg-gray-200 p-2"
+            className="ml-2 w-12 rounded-lg border border-gray-200 bg-gray-100 p-2"
             type="text"
             value={size}
             onChange={(e) => {
@@ -87,7 +89,10 @@ const ValueCalculator = () => {
           cm
         </label>
       </form>
-      <div className="basis-1/4">Result: {result}</div>
-    </section>
+      <div className="flex grow basis-1/2 flex-row">
+        <div>Result in cm²/€ (more is better): </div>
+        <div className="ml-2 w-12 border-b">{result}</div>
+      </div>
+    </div>
   );
 };
