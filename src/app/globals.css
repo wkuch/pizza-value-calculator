@@ -3,6 +3,11 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --accent-1: 255, 90, 90; /* coral */
+  --accent-2: 105, 90, 255; /* indigo */
+  --accent-3: 90, 210, 255; /* sky */
+  --card-bg: 255, 255, 255;
+  --card-bg-dark: 17, 17, 17;
 }
 
 @theme inline {
@@ -23,4 +28,87 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ====== Enhanced background layers ====== */
+.gradient-bg {
+  position: absolute;
+  inset: -25% -25% -25% -25%;
+  background: radial-gradient(60% 60% at 20% 20%, rgba(var(--accent-1), 0.25), transparent 60%),
+    radial-gradient(60% 60% at 80% 20%, rgba(var(--accent-2), 0.25), transparent 60%),
+    radial-gradient(60% 60% at 50% 80%, rgba(var(--accent-3), 0.25), transparent 60%);
+  filter: blur(40px) saturate(120%);
+  animation: gradientShift 16s ease-in-out infinite alternate;
+}
+
+.grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px;
+  mask-image: radial-gradient(ellipse at 50% 40%, black 35%, transparent 70%);
+  pointer-events: none;
+}
+
+.noise-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'%3E%3C/feColorMatrix%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+.pointer-glow {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 50% 50%, rgba(var(--accent-2), 0.35), rgba(var(--accent-1), 0.0) 70%);
+  filter: blur(40px) saturate(140%);
+  transition: transform 0.12s ease-out;
+}
+
+.ripple-effect {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  margin-top: -6px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(var(--accent-3), 0.9), rgba(var(--accent-3), 0.0) 60%);
+  box-shadow: 0 0 0 1px rgba(var(--accent-3), 0.6);
+  animation: ripple 0.9s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(8);
+    opacity: 0;
+  }
+}
+
+@keyframes gradientShift {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate3d(0, -4%, 0) rotate(6deg);
+  }
+}
+
+/* ====== Card (glass) utilities ====== */
+.glass-card {
+  background: color-mix(in oklab, rgba(var(--card-bg), 0.9), transparent 12%);
+}
+
+@media (prefers-color-scheme: dark) {
+  .glass-card {
+    background: color-mix(in oklab, rgba(var(--card-bg-dark), 0.6), transparent 32%);
+  }
 }

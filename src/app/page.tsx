@@ -1,32 +1,49 @@
 "use client";
 
 import { useState } from "react";
+import BackgroundFX from "./components/BackgroundFX";
 
 export default function Home() {
   const [calculationResults, setCalculationResults] = useState<number[]>([0]);
 
   return (
-    <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <h1 className="mb-5 text-center text-5xl font-extrabold leading-normal text-gray-800 md:text-[5rem]">
-          <span className="text-red-300">Pizza</span> value calculator
+    <main className="relative mx-auto flex min-h-dvh w-full max-w-5xl flex-col items-center justify-center px-6 py-16">
+      <BackgroundFX />
+      <section className="mb-10 text-center">
+        <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs backdrop-blur-md">
+          <span className="inline-block h-2 w-2 rounded-full" style={{ background: "rgb(var(--accent-1))" }} />
+          <span className="opacity-80">Instant pizza value insights</span>
+        </div>
+        <h1 className="mt-4 text-balance bg-gradient-to-br from-red-300 via-pink-200 to-amber-200 bg-clip-text text-5xl font-extrabold leading-tight text-transparent md:text-6xl">
+          Pizza value calculator
         </h1>
-        <h2 className="text-1xl mb-3 text-center leading-normal text-gray-600 md:text-[1.5rem]">
-          Calculate how much pizza you get for your money
-        </h2>
-        {calculationResults.map((i: number) => {
-          return <ValueCalculator key={i} />;
-        })}
-        <button
-          className="rounded bg-gray-800 p-2 text-white"
-          onClick={() => setCalculationResults([...calculationResults, 1])}
-        >
-          More calculations
-        </button>
-      </main>
+        <p className="mx-auto mt-3 max-w-xl text-pretty text-base opacity-80 md:text-lg">
+          Calculate how much pizza you get for your money.
+        </p>
+      </section>
+
+      <div className="glass-card w-full rounded-2xl border border-white/10 p-4 shadow-2xl backdrop-blur-md md:p-6">
+        <div className="flex flex-col gap-4">
+          {calculationResults.map((id: number, idx: number) => {
+            return <ValueCalculator key={id} index={idx + 1} />;
+          })}
+          <div className="mt-2 flex justify-center">
+            <button
+              className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-red-400 via-fuchsia-500 to-indigo-500 px-4 py-2 text-white shadow-lg transition active:scale-[0.98]"
+              onClick={() => setCalculationResults([...calculationResults, Date.now()])}
+            >
+              <span className="i-ph-plus-bold transition-transform group-active:scale-90" aria-hidden />
+              More calculations
+            </button>
+          </div>
+        </div>
+      </div>
+      <footer className="mt-8 text-center text-xs opacity-60">cm² per € — more is better</footer>
+    </main>
   );
 }
 
-const ValueCalculator = () => {
+const ValueCalculator = ({ index }: { index: number }) => {
   const pi = 3.14159265359;
   const handleChange = (price: string, size: string) => {
     price = price.replace(",", ".");
@@ -48,38 +65,62 @@ const ValueCalculator = () => {
   const [result, setResult] = useState<string>("");
 
   return (
-    <div className="mb-3 flex w-full flex-row items-center justify-center md:w-3/4 lg:w-1/2">
-      <form className="flex basis-1/2 flex-row">
-        <label className="p-2">
-          Price:
-          <input
-            className="ml-2 w-12 rounded-lg border border-gray-200 bg-gray-100 p-2"
-            placeholder=""
-            type="text"
-            value={price}
-            onChange={(e) => {
-              handleChange(e.target.value, size);
-            }}
-          />
-          €
-        </label>
-        <label className="p-2">
-          Size:
-          <input
-            className="ml-2 w-12 rounded-lg border border-gray-200 bg-gray-100 p-2"
-            type="text"
-            value={size}
-            onChange={(e) => {
-              handleChange(price, e.target.value);
-            }}
-          />
-          cm
-        </label>
-      </form>
-      <div className="flex grow basis-1/2 flex-row">
-        <div>Result in cm²/€ (more is better): </div>
-        <div className="ml-2 w-12 border-b">{result}</div>
+    <section className="rounded-2xl border border-white/12 bg-white/5 p-4 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.35)] backdrop-blur-md md:p-5">
+      <div className="mb-3 flex items-center justify-between">
+        <div className="inline-flex items-center gap-2">
+          <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full bg-gradient-to-br from-red-400 to-fuchsia-500 px-2 text-xs font-semibold text-white">
+            {index}
+          </span>
+          <span className="text-sm opacity-80">Calculation</span>
+        </div>
       </div>
-    </div>
+      <div className="flex w-full flex-col items-stretch gap-3 md:flex-row md:items-center">
+        <form className="flex flex-1 flex-col gap-3 md:flex-row">
+          <label className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-md">
+            <span className="text-sm opacity-70">Price</span>
+            <div className="relative inline-flex items-center">
+              <input
+                className="w-24 bg-transparent px-2 text-base outline-none placeholder:opacity-40"
+                placeholder=""
+                inputMode="decimal"
+                type="text"
+                value={price}
+                onChange={(e) => {
+                  handleChange(e.target.value, size);
+                }}
+                aria-label="Price in euros"
+                aria-describedby="price-help"
+              />
+              <span className="pointer-events-none select-none opacity-60">€</span>
+            </div>
+          </label>
+          <label className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-md">
+            <span className="text-sm opacity-70">Size</span>
+            <div className="relative inline-flex items-center">
+              <input
+                className="w-24 bg-transparent px-2 text-base outline-none placeholder:opacity-40"
+                inputMode="decimal"
+                type="text"
+                value={size}
+                onChange={(e) => {
+                  handleChange(price, e.target.value);
+                }}
+                aria-label="Diameter in centimeters"
+                aria-describedby="size-help"
+              />
+              <span className="pointer-events-none select-none opacity-60">cm</span>
+            </div>
+          </label>
+        </form>
+        <div className="flex flex-1 items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-md">
+          <div className="text-sm opacity-70">Result (cm²/€)</div>
+          <output className="min-w-24 text-right text-xl font-semibold tracking-tight">
+            {result}
+          </output>
+        </div>
+        <p id="price-help" className="sr-only">Enter price in euros, supports comma or dot.</p>
+        <p id="size-help" className="sr-only">Enter pizza diameter in centimeters.</p>
+      </div>
+    </section>
   );
 };
