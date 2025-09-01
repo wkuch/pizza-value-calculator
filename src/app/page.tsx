@@ -1,29 +1,19 @@
-import { type NextPage } from "next";
-import Head from "next/head";
+"use client";
+
 import { useState } from "react";
 
-const Home: NextPage = () => {
+export default function Home() {
   const [calculationResults, setCalculationResults] = useState<number[]>([0]);
 
   return (
-    <>
-      <Head>
-        <title>Pizza value calculator</title>
-        <meta
-          name="description"
-          content="Small web app to compare value of different pizza sizes. "
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
+    <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
         <h1 className="mb-5 text-center text-5xl font-extrabold leading-normal text-gray-800 md:text-[5rem]">
           <span className="text-red-300">Pizza</span> value calculator
         </h1>
         <h2 className="text-1xl mb-3 text-center leading-normal text-gray-600 md:text-[1.5rem]">
           Calculate how much pizza you get for your money
         </h2>
-        {calculationResults.map((i) => {
+        {calculationResults.map((i: number) => {
           return <ValueCalculator key={i} />;
         })}
         <button
@@ -33,11 +23,8 @@ const Home: NextPage = () => {
           More calculations
         </button>
       </main>
-    </>
   );
-};
-
-export default Home;
+}
 
 const ValueCalculator = () => {
   const pi = 3.14159265359;
